@@ -8,7 +8,6 @@ const XLSX = require('xlsx');
 
 // connectToMongoDB function
 const MONGODB_URI = "mongodb+srv://ibthal923:uK7REMIE0TjohCOE@cluster.dniwp8k.mongodb.net/data?retryWrites=true&w=majority&appName=Cluster";
-// const MONGODB_URI = "mongodb+srv://ahmedgebreeeel:yEjQR6cvh2SUXi4i@cluster0.antzmht.mongodb.net/task?retryWrites=true&w=majority&appName=Cluster0";
 
 const connectToMongoDB = async()=>{
     try {
@@ -27,25 +26,22 @@ const transformData = async ()=>{
         await connectToMongoDB();
 
         // get all brands
-        const brands = await BrandModel.find();
+        const brands = await BrandModel.find().lean();
         console.log(brands);
 
         // Loop through brands
 for (const brand of brands) {
     // Check for yearFounded in original and alternative field names
-    let yearFounded = brand.yearFounded || brand.yearCreated || brand.yearsFounded;
+    let yearFounded = brand.yearFounded || parseInt(brand.yearCreated) || parseInt(brand.yearsFounded);
 
     // Check for numberOfLocations in original
     let numberOfLocations = brand.numberOfLocations;
 
-    // Check if headquarters exists
-    if (!brand.headquarters) {
-        console.log('hqAddress exists but headquarters is undefined. Brand:', brand, brand.hqAddress);
-       brand.headquarters = "DuBuqueburgh"
-    }
-
+    // Check if headquarters exists and alternative field names
+    let headquarters = brand.headquarters || brand.hqAddress;
+   
     // Check for brandName in original and alternative field names
-    let brandName = brand.brand ? brand.brand.name : brand.brandName;
+    let brandName = brand.brandName || brand.brand?.name;
 
     // If yearFounded still not found, set it to the minimum allowed year
     if (!yearFounded) {
@@ -57,24 +53,25 @@ for (const brand of brands) {
         numberOfLocations = 1;
     }
   
-    // If brandName is still not found, set a default value
-    if (!brandName) {
-        brandName = "Unknown Brand";
-    }
     
     // Update the brand object with the modified values
-    brand.yearFounded = yearFounded;
+    brand.yearFounded = +yearFounded;
     brand.numberOfLocations = numberOfLocations; 
+    brand.headquarters = headquarters;
     brand.brandName = brandName;
 
     // Validate against schema 
     await BrandModel.validate(brand);
-
-    // Save modified brand
-    await brand.save();
 }
-
-
+ // Save brands in bulk
+ const bulkOps = brands.map((brand: { _id: any; }) => ({
+    updateOne: {
+        filter: { _id: brand._id },
+        update: { $set: brand }
+    }
+}));
+await BrandModel.bulkWrite(bulkOps);
+   
         console.log('Data transformation  is completed');
     } catch (error) {
         console.log("error in transformData method", error);
@@ -82,13 +79,18 @@ for (const brand of brands) {
 }
 
 // Generate test data for 10 new brand documents
-const generateTestData = () => {
+const generateTestData = async() => {
     const testData = Array.from({ length: 10 }, () => ({
         brandName: faker.company.companyName(),
         yearFounded: faker.datatype.number({ min: 1600, max: new Date().getFullYear() }),
         headquarters: faker.address.city(),
         numberOfLocations: faker.datatype.number({ min: 1, max: 100 })
     }));
+
+    // Create new brand documents using testData
+    await BrandModel.create(testData);
+
+    console.log('Test data generated and saved successfully.');
 
     // Document the seed data cases in an Excel file
     const excelData = testData.map((data, index) => ({
@@ -121,10 +123,10 @@ const exportBrandsCollection = async () => {
         console.log('Brands collection exported to newbrands.json');
     } catch (error) {
         console.error('Error exporting Brands collection:', error);
-    } //finally {
-    //     // Disconnect from MongoDB
-    // //    await _mongoose.disconnect();
-    // }
+    } finally {
+       // Disconnect from MongoDB
+       await _mongoose.disconnect();
+    }
 };
 
 

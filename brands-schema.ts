@@ -22,8 +22,8 @@ const brandSchema = new Schema({
 		type: Number,
 		required: [true, 'Number of locations is required'],
 		min: [1, 'There should be at least one location'],
-	},
-	hqAddress: String,
+	}
+	
 }, {
 	timestamps: true,
 });

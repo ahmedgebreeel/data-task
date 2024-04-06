@@ -42,7 +42,6 @@ var fs = require('fs');
 var XLSX = require('xlsx');
 // connectToMongoDB function
 var MONGODB_URI = "mongodb+srv://ibthal923:uK7REMIE0TjohCOE@cluster.dniwp8k.mongodb.net/data?retryWrites=true&w=majority&appName=Cluster";
-// const MONGODB_URI = "mongodb+srv://ahmedgebreeeel:yEjQR6cvh2SUXi4i@cluster0.antzmht.mongodb.net/task?retryWrites=true&w=majority&appName=Cluster0";
 var connectToMongoDB = function () { return __awaiter(_this, void 0, void 0, function () {
     var error_1;
     return __generator(this, function (_a) {
@@ -64,33 +63,30 @@ var connectToMongoDB = function () { return __awaiter(_this, void 0, void 0, fun
 }); };
 // transformData function
 var transformData = function () { return __awaiter(_this, void 0, void 0, function () {
-    var brands, _i, brands_1, brand, yearFounded, numberOfLocations, brandName, error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var brands, _i, brands_1, brand, yearFounded, numberOfLocations, headquarters, brandName, bulkOps, error_2;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 8, , 9]);
+                _b.trys.push([0, 8, , 9]);
                 // Connect to MongoDB
                 return [4 /*yield*/, connectToMongoDB()];
             case 1:
                 // Connect to MongoDB
-                _a.sent();
-                return [4 /*yield*/, BrandModel.find()];
+                _b.sent();
+                return [4 /*yield*/, BrandModel.find().lean()];
             case 2:
-                brands = _a.sent();
+                brands = _b.sent();
                 console.log(brands);
                 _i = 0, brands_1 = brands;
-                _a.label = 3;
+                _b.label = 3;
             case 3:
-                if (!(_i < brands_1.length)) return [3 /*break*/, 7];
+                if (!(_i < brands_1.length)) return [3 /*break*/, 6];
                 brand = brands_1[_i];
-                yearFounded = brand.yearFounded || brand.yearCreated || brand.yearsFounded;
+                yearFounded = brand.yearFounded || parseInt(brand.yearCreated) || parseInt(brand.yearsFounded);
                 numberOfLocations = brand.numberOfLocations;
-                // Check if headquarters exists
-                if (!brand.headquarters) {
-                    console.log('hqAddress exists but headquarters is undefined. Brand:', brand, brand.hqAddress);
-                    brand.headquarters = "DuBuqueburgh";
-                }
-                brandName = brand.brand ? brand.brand.name : brand.brandName;
+                headquarters = brand.headquarters || brand.hqAddress;
+                brandName = brand.brandName || ((_a = brand.brand) === null || _a === void 0 ? void 0 : _a.name);
                 // If yearFounded still not found, set it to the minimum allowed year
                 if (!yearFounded) {
                     yearFounded = 1600;
@@ -99,33 +95,34 @@ var transformData = function () { return __awaiter(_this, void 0, void 0, functi
                 if (!numberOfLocations || isNaN(numberOfLocations)) {
                     numberOfLocations = 1;
                 }
-                // If brandName is still not found, set a default value
-                if (!brandName) {
-                    brandName = "Unknown Brand";
-                }
                 // Update the brand object with the modified values
-                brand.yearFounded = yearFounded;
+                brand.yearFounded = +yearFounded;
                 brand.numberOfLocations = numberOfLocations;
+                brand.headquarters = headquarters;
                 brand.brandName = brandName;
                 // Validate against schema 
                 return [4 /*yield*/, BrandModel.validate(brand)];
             case 4:
                 // Validate against schema 
-                _a.sent();
-                // Save modified brand
-                return [4 /*yield*/, brand.save()];
+                _b.sent();
+                _b.label = 5;
             case 5:
-                // Save modified brand
-                _a.sent();
-                _a.label = 6;
-            case 6:
                 _i++;
                 return [3 /*break*/, 3];
+            case 6:
+                bulkOps = brands.map(function (brand) { return ({
+                    updateOne: {
+                        filter: { _id: brand._id },
+                        update: { $set: brand }
+                    }
+                }); });
+                return [4 /*yield*/, BrandModel.bulkWrite(bulkOps)];
             case 7:
+                _b.sent();
                 console.log('Data transformation  is completed');
                 return [3 /*break*/, 9];
             case 8:
-                error_2 = _a.sent();
+                error_2 = _b.sent();
                 console.log("error in transformData method", error_2);
                 return [3 /*break*/, 9];
             case 9: return [2 /*return*/];
@@ -133,48 +130,65 @@ var transformData = function () { return __awaiter(_this, void 0, void 0, functi
     });
 }); };
 // Generate test data for 10 new brand documents
-var generateTestData = function () {
-    var testData = Array.from({ length: 10 }, function () { return ({
-        brandName: faker.company.companyName(),
-        yearFounded: faker.datatype.number({ min: 1600, max: new Date().getFullYear() }),
-        headquarters: faker.address.city(),
-        numberOfLocations: faker.datatype.number({ min: 1, max: 100 })
-    }); });
-    // Document the seed data cases in an Excel file
-    var excelData = testData.map(function (data, index) { return ({
-        Brand: data.brandName,
-        YearFounded: data.yearFounded,
-        Headquarters: data.headquarters,
-        NumberOfLocations: data.numberOfLocations,
-        Description: "Test Case ".concat(index + 1)
-    }); });
-    // Convert data to worksheet
-    var ws = XLSX.utils.json_to_sheet(excelData);
-    // Convert worksheet to workbook
-    var wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Seed Data");
-    // Write workbook to file
-    XLSX.writeFile(wb, 'seed_data.xlsx');
-};
+var generateTestData = function () { return __awaiter(_this, void 0, void 0, function () {
+    var testData, excelData, ws, wb;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                testData = Array.from({ length: 10 }, function () { return ({
+                    brandName: faker.company.companyName(),
+                    yearFounded: faker.datatype.number({ min: 1600, max: new Date().getFullYear() }),
+                    headquarters: faker.address.city(),
+                    numberOfLocations: faker.datatype.number({ min: 1, max: 100 })
+                }); });
+                // Create new brand documents using testData
+                return [4 /*yield*/, BrandModel.create(testData)];
+            case 1:
+                // Create new brand documents using testData
+                _a.sent();
+                console.log('Test data generated and saved successfully.');
+                excelData = testData.map(function (data, index) { return ({
+                    Brand: data.brandName,
+                    YearFounded: data.yearFounded,
+                    Headquarters: data.headquarters,
+                    NumberOfLocations: data.numberOfLocations,
+                    Description: "Test Case ".concat(index + 1)
+                }); });
+                ws = XLSX.utils.json_to_sheet(excelData);
+                wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Seed Data");
+                // Write workbook to file
+                XLSX.writeFile(wb, 'seed_data.xlsx');
+                return [2 /*return*/];
+        }
+    });
+}); };
 // Function to export Brands collection as a JSON file
 var exportBrandsCollection = function () { return __awaiter(_this, void 0, void 0, function () {
     var brands, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 2, 3, 5]);
                 return [4 /*yield*/, BrandModel.find()];
             case 1:
                 brands = _a.sent();
                 // Write the brands collection to a JSON file
                 fs.writeFileSync('newbrands.json', JSON.stringify(brands, null, 2));
                 console.log('Brands collection exported to newbrands.json');
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 5];
             case 2:
                 error_3 = _a.sent();
                 console.error('Error exporting Brands collection:', error_3);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 5];
+            case 3: 
+            // Disconnect from MongoDB
+            return [4 /*yield*/, _mongoose.disconnect()];
+            case 4:
+                // Disconnect from MongoDB
+                _a.sent();
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

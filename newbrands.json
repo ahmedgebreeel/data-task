@@ -5,7 +5,7 @@
     "yearCreated": "1970",
     "headquarters": "Jastside",
     "numberOfLocations": 2132,
-    "updatedAt": "2024-04-05T16:43:25.549Z",
+    "updatedAt": "2024-04-06T00:10:44.202Z",
     "yearFounded": 1600
   },
   {
@@ -14,14 +14,15 @@
     "yearFounded": 1600,
     "headquarters": "Gavinstead",
     "numberOfLocations": 1,
-    "updatedAt": "2024-04-05T16:43:25.744Z"
+    "updatedAt": "2024-04-06T00:10:44.202Z"
   },
   {
     "_id": "66069ff93007b006635c0247",
     "brandName": "Breitenberg, Greenholt and Ledner",
     "yearFounded": 1982,
     "headquarters": "Fort Lenna",
-    "numberOfLocations": 1000
+    "numberOfLocations": 1000,
+    "updatedAt": "2024-04-06T00:10:44.202Z"
   },
   {
     "_id": "66069ff93007b006635c0248",
@@ -30,7 +31,7 @@
     "yearCreated": "1970",
     "headquarters": "Kundebury",
     "numberOfLocations": 1,
-    "updatedAt": "2024-04-05T16:43:26.100Z"
+    "updatedAt": "2024-04-06T00:10:44.202Z"
   },
   {
     "_id": "66069ff93007b006635c0249",
@@ -38,7 +39,7 @@
     "headquarters": "Jonesborough",
     "numberOfLocations": 1,
     "yearsFounded": "1980",
-    "updatedAt": "2024-04-05T16:43:26.259Z",
+    "updatedAt": "2024-04-06T00:10:44.202Z",
     "yearFounded": 1600
   },
   {
@@ -48,7 +49,7 @@
     "yearCreated": 1970,
     "headquarters": "Wardfort",
     "numberOfLocations": 1,
-    "updatedAt": "2024-04-05T16:43:26.399Z"
+    "updatedAt": "2024-04-06T00:10:44.202Z"
   },
   {
     "_id": "66069ff93007b006635c024b",
@@ -56,7 +57,7 @@
     "yearFounded": 1600,
     "headquarters": "Lemkeland",
     "numberOfLocations": 1,
-    "updatedAt": "2024-04-05T16:43:26.550Z"
+    "updatedAt": "2024-04-06T00:10:44.202Z"
   },
   {
     "_id": "66069ff93007b006635c024d",
@@ -67,7 +68,7 @@
       "name": "Licensed Concrete Tuna"
     },
     "brandName": "Unknown Brand",
-    "updatedAt": "2024-04-05T16:43:26.928Z"
+    "updatedAt": "2024-04-06T00:10:44.202Z"
   },
   {
     "_id": "66069ff93007b006635c024e",
@@ -76,7 +77,7 @@
     "headquarters": "North Ralphport",
     "numberOfLocations": 1,
     "brand": "",
-    "updatedAt": "2024-04-05T16:43:27.073Z"
+    "updatedAt": "2024-04-06T00:10:44.202Z"
   },
   {
     "_id": "66069ff93007b006635c024c",
@@ -85,6 +86,106 @@
     "numberOfLocations": 9200,
     "hqAddress": "DuBuqueburgh",
     "headquarters": "DuBuqueburgh",
-    "updatedAt": "2024-04-05T18:02:40.429Z"
+    "updatedAt": "2024-04-06T00:10:44.202Z"
+  },
+  {
+    "_id": "66109304c8c92dcf83de81ba",
+    "brandName": "Hintz LLC",
+    "yearFounded": 1763,
+    "headquarters": "Jocelynfort",
+    "numberOfLocations": 42,
+    "createdAt": "2024-04-06T00:10:44.622Z",
+    "updatedAt": "2024-04-06T00:10:44.622Z",
+    "__v": 0
+  },
+  {
+    "_id": "66109304c8c92dcf83de81bb",
+    "brandName": "Reichel, Weissnat and Stroman",
+    "yearFounded": 1618,
+    "headquarters": "Sauerburgh",
+    "numberOfLocations": 57,
+    "createdAt": "2024-04-06T00:10:44.622Z",
+    "updatedAt": "2024-04-06T00:10:44.622Z",
+    "__v": 0
+  },
+  {
+    "_id": "66109304c8c92dcf83de81be",
+    "brandName": "Padberg - Bauch",
+    "yearFounded": 2004,
+    "headquarters": "Hillsport",
+    "numberOfLocations": 83,
+    "createdAt": "2024-04-06T00:10:44.622Z",
+    "updatedAt": "2024-04-06T00:10:44.622Z",
+    "__v": 0
+  },
+  {
+    "_id": "66109304c8c92dcf83de81bf",
+    "brandName": "Gutkowski, Mraz and Moore",
+    "yearFounded": 1874,
+    "headquarters": "Round Rock",
+    "numberOfLocations": 84,
+    "createdAt": "2024-04-06T00:10:44.623Z",
+    "updatedAt": "2024-04-06T00:10:44.623Z",
+    "__v": 0
+  },
+  {
+    "_id": "66109304c8c92dcf83de81c0",
+    "brandName": "Ziemann - Lesch",
+    "yearFounded": 1839,
+    "headquarters": "Beattyport",
+    "numberOfLocations": 21,
+    "createdAt": "2024-04-06T00:10:44.623Z",
+    "updatedAt": "2024-04-06T00:10:44.623Z",
+    "__v": 0
+  },
+  {
+    "_id": "66109304c8c92dcf83de81c1",
+    "brandName": "Kuhic - Runte",
+    "yearFounded": 1645,
+    "headquarters": "Judsonview",
+    "numberOfLocations": 46,
+    "createdAt": "2024-04-06T00:10:44.623Z",
+    "updatedAt": "2024-04-06T00:10:44.623Z",
+    "__v": 0
+  },
+  {
+    "_id": "66109304c8c92dcf83de81c2",
+    "brandName": "Morar - Harvey",
+    "yearFounded": 1987,
+    "headquarters": "Gorczanytown",
+    "numberOfLocations": 33,
+    "createdAt": "2024-04-06T00:10:44.623Z",
+    "updatedAt": "2024-04-06T00:10:44.623Z",
+    "__v": 0
+  },
+  {
+    "_id": "66109304c8c92dcf83de81c3",
+    "brandName": "Glover - Rempel",
+    "yearFounded": 1798,
+    "headquarters": "Goldenburgh",
+    "numberOfLocations": 56,
+    "createdAt": "2024-04-06T00:10:44.623Z",
+    "updatedAt": "2024-04-06T00:10:44.623Z",
+    "__v": 0
+  },
+  {
+    "_id": "66109304c8c92dcf83de81bc",
+    "brandName": "Cormier - Hodkiewicz",
+    "yearFounded": 1763,
+    "headquarters": "Mariannetown",
+    "numberOfLocations": 55,
+    "createdAt": "2024-04-06T00:10:44.622Z",
+    "updatedAt": "2024-04-06T00:10:44.622Z",
+    "__v": 0
+  },
+  {
+    "_id": "66109304c8c92dcf83de81bd",
+    "brandName": "Armstrong Inc",
+    "yearFounded": 1809,
+    "headquarters": "Rauview",
+    "numberOfLocations": 92,
+    "createdAt": "2024-04-06T00:10:44.622Z",
+    "updatedAt": "2024-04-06T00:10:44.622Z",
+    "__v": 0
   }
 ]
